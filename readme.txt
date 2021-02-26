@@ -16,12 +16,6 @@ When in doubt, state your assumptions and proceed.
 
 Your design must take into consideration of future support of new input file formats (for example xml files).
 
-Note 1: DO NOT MODIFY THE GIVEN DATA FILES!
-Note 2: you can include any open-source libraries you need in addition to what's provided in "lib" directory.
-Note 3: Use the given RecordMerger class as a starting point.
-Note 4: Please refrain from using language features from Java 9 or above. The compiler flag is set to accept 1.8 source.
-
-
 Expected Outcome
 ----------------
 - Your program must generate "combined.csv"
