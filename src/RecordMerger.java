@@ -1,7 +1,9 @@
+import mergers.Controller;
+
 /**
  * 
  * @author Mahsa Sadi
- * @since 2021 -01-27
+ * @since 2021-01-27
  * 
  * 
  *        This program receives an array of file names containing data tables,
@@ -34,10 +36,8 @@ public class RecordMerger {
 		}
 
 		// your code starts here.
-		// ### j-units need to be added.
 		Controller controller = new Controller();
 		controller.parseAndCombineInput(args);
-
 	}
 
 }

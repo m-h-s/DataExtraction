@@ -1,12 +1,14 @@
 package inputReaders;
 
+import java.util.logging.Level;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import dataOrganizer.Record;
-import dataOrganizer.Table;
+import dataOrganizers.Record;
+import dataOrganizers.Table;
 
 /**
  * 
@@ -23,7 +25,6 @@ public class HTMLParser extends InputParser {
 	private final String TABLEID = "directory";
 
 	public HTMLParser(String input) {
-
 		super(input);
 	}
 
@@ -33,7 +34,8 @@ public class HTMLParser extends InputParser {
 		openFile();
 		createDocument();
 		extractTableInfo();
-		createOutputTable();
+		if (table != null && header != null && dataRows != null)
+			createOutputTable();
 		return output;
 	}
 
@@ -59,14 +61,13 @@ public class HTMLParser extends InputParser {
 			extractDataHeader();
 			extractDataRows();
 		} else {
-			System.out.println("Error: file " + input + " does not have a table with id \"" + TABLEID + "\".");
+			logger.log(Level.SEVERE,"File \"" + input + "\" does not have a table with id \"" + TABLEID + "\".");
 		}
 
 	}
 
 	@Override
 	protected void extractDataHeader() {
-
 		/**
 		 * Extracts the header of the data table from the DOM. The header is the first
 		 * row of the table.
@@ -75,7 +76,7 @@ public class HTMLParser extends InputParser {
 		if (!allRows.isEmpty()) {
 			header = allRows.first();
 		} else {
-			System.out.println("Error: The file " + input + " contains no header and data rows.");
+			logger.log(Level.WARNING,"File \"" + input + "\" contains no header and data rows.");
 		}
 
 	}
@@ -91,21 +92,19 @@ public class HTMLParser extends InputParser {
 		if (allRows.size() > 1) {
 			dataRows = allRows.first().siblingElements();
 		} else {
-			System.out.println("Error: The file " + input + " does not have data rows.");
+			logger.log(Level.WARNING,"File \"" + input + "\" does not have data rows.");
 		}
 	}
 
 	@Override
 	protected void createOutputTable() {
-
 		/**
 		 * Creates a table based on the information extracted from the DOM.
 		 */
-
 		String[] fieldNames = getFieldNames();
 		int idIndex = getIdColIndex(fieldNames);
 
-		if (table == null || header == null || dataRows == null || !checkId(idIndex)) {
+		if (!checkId(idIndex)) {
 			return;
 		}
 
@@ -117,8 +116,8 @@ public class HTMLParser extends InputParser {
 				Record record = createRecord(fieldNames, fieldValues, idIndex);
 				output.addRecord(record);
 			} else {
-				System.out.println(
-						"Error: In the file " + input + "there is a mismatch between header size and row size.");
+				logger.log(Level.SEVERE,
+						"In the file \"" + input + "\" there is a mismatch between header size and row size.");
 			}
 		}
 
@@ -132,8 +131,7 @@ public class HTMLParser extends InputParser {
 
 		int i = 0;
 		for (Element e : header.children()) {
-			fieldNames[i] = e.text().trim().toLowerCase();
-			i++;
+			fieldNames[i++] = e.text().trim().toLowerCase();
 		}
 
 		return fieldNames;
@@ -147,8 +145,7 @@ public class HTMLParser extends InputParser {
 
 		int i = 0;
 		for (Element data : dataRow.children()) {
-			fieldValues[i] = data.text().trim();
-			i++;
+			fieldValues[i++] = data.text().trim();
 		}
 
 		return fieldValues;

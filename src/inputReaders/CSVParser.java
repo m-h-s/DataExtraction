@@ -5,10 +5,11 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import au.com.bytecode.opencsv.CSVReader;
-import dataOrganizer.Record;
-import dataOrganizer.Table;
+import dataOrganizers.Record;
+import dataOrganizers.Table;
 
 /**
  * 
@@ -26,7 +27,6 @@ public class CSVParser extends InputParser {
 	String[] header;
 
 	public CSVParser(String input) {
-
 		super(input);
 		table = new ArrayList<>();
 		dataRows = new ArrayList<>();
@@ -35,16 +35,15 @@ public class CSVParser extends InputParser {
 
 	@Override
 	public Table parse() {
-
 		openFile();
 		extractTableInfo();
-		createOutputTable();
+		if (!table.isEmpty())
+			createOutputTable();
 		return output;
 	}
 
 	@Override
 	protected void extractTableInfo() {
-
 		/**
 		 * Opens the CSV file and reads the data all at once.
 		 */
@@ -59,7 +58,11 @@ public class CSVParser extends InputParser {
 			if (!table.isEmpty()) {
 				extractDataHeader();
 				extractDataRows();
+			} else {
+				logger.log(Level.WARNING, "File \"" + input + "\" is empty.");
 			}
+
+			csvReader.close();
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -73,26 +76,26 @@ public class CSVParser extends InputParser {
 		 * Extract the header of the data table. The header is the first row of the
 		 * table.
 		 */
-
 		header = new String[table.get(0).length];
 
 		int i = 0;
 		for (String title : table.get(0)) {
-			header[i] = title.trim().toLowerCase();
-			i++;
+			header[i++] = title.trim().toLowerCase();
 		}
 
 	}
 
 	@Override
 	protected void extractDataRows() {
-
 		/**
 		 * Extracts the data rows of the table. All rows except the first row are data
 		 * rows.
 		 */
-
 		dataRows = table.subList(1, table.size());
+
+		if (dataRows.isEmpty()) {
+			logger.log(Level.WARNING, "File \"" + input + "\" does not have data rows.");
+		}
 
 	}
 
@@ -101,7 +104,6 @@ public class CSVParser extends InputParser {
 		/**
 		 * Creates a table based on the extracted data header and data rows.
 		 */
-
 		int idIndex = getIdColIndex(header);
 
 		if (!(checkId(idIndex)))
@@ -109,8 +111,8 @@ public class CSVParser extends InputParser {
 
 		for (String[] row : dataRows) {
 			if (header.length != row.length) {
-				System.out.println(
-						"Error: In file " + input + " there is a mismatch between data row and data header size.");
+				logger.log(Level.WARNING,
+						"In file \"" + input + "\" there is a mismatch between data row and data header size");
 			} else {
 				Record record = createRecord(header, row, idIndex);
 				output.addRecord(record);

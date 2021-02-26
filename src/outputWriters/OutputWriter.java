@@ -31,7 +31,6 @@ public class OutputWriter {
 	}
 
 	public void openFile() {
-
 		/**
 		 * Opens the output file and set the encoding for writing to the file to UTF-8.
 		 */
@@ -45,7 +44,6 @@ public class OutputWriter {
 	}
 
 	public void write(List<String[]> dataStream) {
-
 		/**
 		 * Receives and writes the data all at once to the output file.
 		 */

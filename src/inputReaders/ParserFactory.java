@@ -12,11 +12,9 @@ import java.util.Objects;
 public class ParserFactory {
 
 	public InputParser createParser(String fileName) {
-
 		/**
 		 * New checks should be added in case of adding new types of parsers.
-		 */
-		
+		 */	
 		if (fileName.matches(".*\\.html$|.*\\.htm$")) {
 			return new HTMLParser(fileName);
 

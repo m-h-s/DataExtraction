@@ -1,4 +1,4 @@
-package dataOrganizer;
+package dataOrganizers;
 
 /**
  * 
@@ -7,14 +7,12 @@ package dataOrganizer;
  * Fields which is a map of (Attribute nName, Attribute Value) pairs.
  *
  */
-
 public class Record {
 
 	private String id;
 	private Fields fields;
 
 	public Record() {
-
 		/**
 		 * Creates an empty record.
 		 */
@@ -23,7 +21,6 @@ public class Record {
 	}
 
 	public void addField(String name, String value) {
-
 		/**
 		 * Adds new fields to a record.
 		 */
@@ -31,22 +28,18 @@ public class Record {
 	}
 
 	public Fields getFields() {
-
 		return fields;
 	}
 
 	public String getId() {
-
 		return id;
 	}
 
 	public void setId(String id) {
-
 		this.id = id;
 	}
 
 	public String toString() {
-
 		return this.id + ": " + this.fields;
 	}
 
