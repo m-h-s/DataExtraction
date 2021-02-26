@@ -51,6 +51,6 @@ To compile, run and submit
  * Windows:
    * build.bat: cleans, compiles and creates cantest.jar file, and a veeva_solution.zip file for submission.
    * run.bat: runs cantest.jar
-- To submit your solution, please perform a final build and share veeva_solution.zip with us, preferably through Google Drive.
+
 
 
