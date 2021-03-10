@@ -12,7 +12,6 @@ write a Java program that performs the following:
    - The "ID" column in the output file "combined.csv" should be sorted in ascending order.
    - The column headers do not need to be in multiple languages.
 
-When in doubt, state your assumptions and proceed.
 
 Your design must take into consideration of future support of new input file formats (for example xml files).
 
